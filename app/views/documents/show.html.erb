@@ -1,0 +1,13 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Content:</b>
+  <%= sanitize @document.content, :tags => %w(p i b s u) %>
+</p>
+
+<p>
+  [<%= link_to "pdf", document_path(@document, :format => :pdf) %>]
+</p>
+
+<%= link_to 'Edit', edit_document_path(@document) %> |
+<%= link_to 'Back', documents_path %>
