@@ -1,3 +1,5 @@
+# highlight: pdf format for show action
+
 class DocumentsController < ApplicationController
   # GET /documents
   # GET /documents.xml
