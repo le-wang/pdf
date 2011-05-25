@@ -5,7 +5,7 @@
 
 <p>
   <b>Content:</b>
-  <%= sanitize @document.content, :tags => %w(p i b s u) %>
+  <%= sanitize @document.content, :tags => %w(p i b s u ul ol li) %>
 </p>
 
 <p>
