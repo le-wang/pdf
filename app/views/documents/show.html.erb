@@ -14,3 +14,8 @@
 
 <%= link_to 'Edit', edit_document_path(@document) %> |
 <%= link_to 'Back', documents_path %>
+
+<% doc = Nokogiri::HTML(@document.content) %>
+<% doc.xpath('//ul/li').each do |list_item| %>
+  <%= list_item %>
+<% end %>
