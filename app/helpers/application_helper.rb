@@ -4,11 +4,13 @@
 module ApplicationHelper
   def wrap(content)
     markup = Nokogiri::HTML(content)
+    
     markup.xpath('//s').each do |item|
       item.name = "strikethrough"
     end
+
     markup.xpath('//ul/li').each do |item|
-      item.replace "* #{item.inner_html}"
+      item.replace "BULLET-POINT #{item.text}"
     end
     markup.xpath('//ol/li').each_with_index do |item, index|
       item.replace "#{index + 1}. #{item.inner_html}"
@@ -19,13 +21,11 @@ module ApplicationHelper
     markup.xpath('//ul').each do |list|
       list.replace list.inner_html
     end
+  
     markup.xpath('//p').each do |paragraph|
       paragraph.replace "\n" + paragraph.inner_html
     end
 
-    markup.to_s.
-      gsub(/.*<body>/m, "").
-      gsub(/<\/body.*>/m, "").
-      strip
+    markup.at_xpath('//body').inner_html.gsub("BULLET-POINT", "•").strip
   end
 end
