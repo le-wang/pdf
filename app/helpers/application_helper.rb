@@ -1,10 +1,12 @@
 # encoding: utf-8
 
 module ApplicationHelper
+  def sanitized_content(content)
+    sanitize(content, :tags => %w(p strong em s strike u ul ol li hr))
+  end
 
   def wrap(content, pdf)
-    sanitized_content = sanitize(content, :tags => %w(p strong em s strike u ul ol li))
-    paragraphs = content_to_paragraphs(sanitized_content)
+    paragraphs = content_to_paragraphs(content)
     while paragraph = paragraphs.shift
       render_paragraph(paragraph, pdf)
     end
@@ -14,6 +16,12 @@ module ApplicationHelper
   
   def render_paragraph(paragraph, pdf)
     pdf.instance_eval do
+      if paragraph == "<hr />"
+        move_down 5
+        pdf.stroke { pdf.horizontal_rule }
+        return
+      end
+
       move_down 10
 
       markup = Nokogiri::HTML(paragraph.gsub(/\s+/, " "))
@@ -44,7 +52,7 @@ module ApplicationHelper
   end
 
   def content_to_paragraphs(content)
-    regex_string = "<p>.*?</p>|<ul>.*?</ul>|<ol>.*?</ol>"
+    regex_string = "<p>.*?</p>|<ul>.*?</ul>|<ol>.*?</ol>|<hr />"
     regex = Regexp.new(regex_string, Regexp::MULTILINE)
     paragraphs = content.scan(regex)
   end
